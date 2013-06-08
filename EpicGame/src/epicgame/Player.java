@@ -6,24 +6,44 @@ import java.awt.image.BufferedImage;
 
 public class Player {
     
-    public BufferedImage player_image=new BufferedImage(EpicGame.Height,EpicGame.Widht, BufferedImage.TYPE_INT_RGB);
+    private BufferedImage player_image=new BufferedImage(EpicGame.Height,EpicGame.Widht, BufferedImage.TYPE_INT_RGB);
+    private boolean active=true;
     
-    int x,y;
+    public int max_ammo;
+    public int current_ammo;
     
-    Player(int x,int y,BufferedImage a)
+    public long last_fired;
+    
+    public int x,y;
+    public int height,width;
+    
+    Player(int x,int y,int height,int width,int max_ammo,BufferedImage a)
     {
         
         player_image=a;
         this.x=x;    
-        this.y=y;
-        
+        this.y=y;  
+        this.height=height;
+        this.width=width;
+        this.max_ammo=max_ammo;
+        current_ammo=max_ammo;
+           
     }
+    
+    
+    
     
     void paint(Graphics a)
     {
-        a.drawImage(player_image,x,y,100,60, null);
-        
+            a.drawImage(player_image,x,y,height,width, null);  
     }
     
-    
+    void move(int offset_x,int offset_y)
+    {
+        if(active)
+        {
+            x+=offset_x;
+            y+=offset_y;
+        }
+    }    
 }
