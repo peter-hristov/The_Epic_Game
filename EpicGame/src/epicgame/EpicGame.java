@@ -6,6 +6,8 @@ import java.awt.Canvas;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferInt;
@@ -22,7 +24,7 @@ public class EpicGame extends Canvas implements Runnable {
     public boolean running=false;
     public int update_count;
     
-    public static final int Widht=1000;
+    public static final int Widht=1600;
     public static final int Height=(Widht*9)/16;
    
 
@@ -35,6 +37,8 @@ public class EpicGame extends Canvas implements Runnable {
     
     BufferedImage Background=new BufferedImage(Widht,Height, BufferedImage.TYPE_INT_RGB);
     
+    public InputHandler input;
+    
     
     //private int pixels[]=((DataBufferInt)image.getRaster().getDataBuffer()).getData();
     
@@ -43,6 +47,7 @@ public class EpicGame extends Canvas implements Runnable {
     
     public EpicGame()
     {
+        
         setMinimumSize(new Dimension(Widht,Height));
         setMaximumSize(new Dimension(Widht,Height));
         setPreferredSize(new Dimension(Widht,Height));
@@ -50,14 +55,17 @@ public class EpicGame extends Canvas implements Runnable {
         frame=new JFrame(GameName);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setLayout(new BorderLayout());
-        
         frame.add(this,BorderLayout.CENTER);
         frame.pack();
-        
+   
         frame.setResizable(false);
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
         
+        
+        input=new InputHandler(this);
+        
+        frame.requestFocusInWindow();
         
        
         BufferedImage image2=new BufferedImage(100,100, BufferedImage.TYPE_INT_RGB);
@@ -98,16 +106,36 @@ public class EpicGame extends Canvas implements Runnable {
     
     public void update()
     {
+        
+        
+        
+        if (input.up.is_pressed())
+        {
+            player.y--; 
+        }
+        if (input.down.is_pressed())
+        {
+            player.y++; 
+        }
+        if (input.left.is_pressed())
+        {
+            player.x--; 
+        }
+        if (input.right.is_pressed())
+        {
+            player.x++; 
+        }
+        
+        
         update_count++;
-        
-        
-    
+        //player.x+=1;
+        //player.y+=1;
     }
     
     
     
 
-    public void render()
+    public void render()//This is where the shit happens!
     {
         
         BufferStrategy bs=getBufferStrategy();
@@ -119,31 +147,18 @@ public class EpicGame extends Canvas implements Runnable {
         }
         
      
-        
-      
-        
-            
+    
         Graphics a=bs.getDrawGraphics();
-        
-        
-        
         a.setColor(Color.yellow);
-        a.fillRect(0, 0, 10000, 10000);
+        
         a.drawImage(Background, 0, 0, frame.getWidth(), frame.getHeight(),null);
         
-       
-        
+      
         player.paint(a);
         
         bs.show();
         a.dispose();
-
-        
-        
-        
-        
-
-        
+   
     }
     
     
@@ -163,7 +178,7 @@ public class EpicGame extends Canvas implements Runnable {
     public void run() {
         
         long lastTime=System.nanoTime();
-        double ns_per_tick=10000000D; 
+        double ns_per_tick=1000000D; 
         
         int frames=0;
         int updates=0;
@@ -181,24 +196,16 @@ public class EpicGame extends Canvas implements Runnable {
             {
                 updates++;
                 update();
+                render();
                 delta--;
                 should_render=true;
                 
             }
             
-            try {
-                Thread.sleep(22);
-            } catch (InterruptedException ex) {
-                Logger.getLogger(EpicGame.class.getName()).log(Level.SEVERE, null, ex);
-            }
+         
             
             
-            if(should_render)
-            {
-                frames++;
             
-                render();
-            }
             
             if(System.currentTimeMillis()-lastTimer >= 100)
             {
@@ -211,6 +218,14 @@ public class EpicGame extends Canvas implements Runnable {
         }
         //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
+
+    
+    
+    
+    
+    
+    
+  
 
     
     
