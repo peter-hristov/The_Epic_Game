@@ -22,22 +22,21 @@ public class EpicGame extends Canvas implements Runnable {
     public boolean running=false;
     public int update_count;
     
-    public static final int Actual_Widht=160;
-    public static final int Actual_Height=(Actual_Widht*9)/16;
-    public static final int Scale=5;
-    
-    public static final int Widht=Actual_Widht*Scale;
-    public static final int Height= Actual_Height*Scale;
+    public static final int Widht=1000;
+    public static final int Height=(Widht*9)/16;
+   
 
     
     public static final String GameName="Epic Game!";
     
     private JFrame frame;
     
-    private BufferedImage image=new BufferedImage(Widht,Height, BufferedImage.TYPE_INT_RGB);
-    private BufferedImage image2=new BufferedImage(Widht,Height, BufferedImage.TYPE_INT_RGB);
+    private Player player;
     
-    private int pixels[]=((DataBufferInt)image.getRaster().getDataBuffer()).getData();
+    BufferedImage Background=new BufferedImage(Widht,Height, BufferedImage.TYPE_INT_RGB);
+    
+    
+    //private int pixels[]=((DataBufferInt)image.getRaster().getDataBuffer()).getData();
     
     
     
@@ -58,6 +57,26 @@ public class EpicGame extends Canvas implements Runnable {
         frame.setResizable(false);
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
+        
+        
+       
+        BufferedImage image2=new BufferedImage(100,100, BufferedImage.TYPE_INT_RGB);
+        
+        
+        try {
+            
+            Background = ImageIO.read(new File("src\\epicgame\\images.jpg"));
+            image2 = ImageIO.read(new File("src\\epicgame\\a.jpg"));
+            
+        } catch (IOException ex) {
+            Logger.getLogger(EpicGame.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        
+        
+        
+        player=new Player(100,0,image2);
+        System.out.println(10);
         
     
     }
@@ -81,24 +100,11 @@ public class EpicGame extends Canvas implements Runnable {
     {
         update_count++;
         
-        for(int i=0;i<pixels.length;i++ )
-            pixels[i]=i+update_count;
+        
     
     }
     
-    public void render_dis(BufferStrategy bs)
-    {
-        
-        Graphics a=bs.getDrawGraphics();
-        
-        a.setColor(Color.yellow);
-        a.fillRect(0, 0, 10000, 10000);
-        a.drawImage(image, 0, 0, frame.getWidth(), frame.getHeight(),null);
-        
-        a.drawImage(image2, 10, 100, null);
-        bs.show();
-        a.dispose();
-    }
+    
     
 
     public void render()
@@ -112,57 +118,29 @@ public class EpicGame extends Canvas implements Runnable {
             return;
         }
         
+     
         
-        
-        try {
-            
-            image = ImageIO.read(new File("src\\epicgame\\images.jpg"));
-            image2 = ImageIO.read(new File("src\\epicgame\\a.jpg"));
-            
-        } catch (IOException ex) {
-            Logger.getLogger(EpicGame.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        
+      
         
             
         Graphics a=bs.getDrawGraphics();
         
-        render_dis(bs);
+        
+        
+        a.setColor(Color.yellow);
+        a.fillRect(0, 0, 10000, 10000);
+        a.drawImage(Background, 0, 0, frame.getWidth(), frame.getHeight(),null);
+        
+       
+        
+        player.paint(a);
+        
+        bs.show();
+        a.dispose();
 
         
         
-        //a.setColor(Color.yellow);
-        //a.fillRect(0, 0, 10000, 10000);
-//        a.drawImage(image, 0, 0, frame.getWidth(), frame.getHeight(),null);
-//        
-//        a.drawImage(image2, 10, 100, null);
-       // bs.show();
-//        a.dispose();
         
-        
-      
-        
-//        try {
-//            
-//            image = ImageIO.read(new File("C:\\Users\\Peter\\Documents\\GitHub\\test\\EpicGame\\src\\epicgame\\a.jpg"));
-//            
-//        } catch (IOException ex) {
-//            Logger.getLogger(EpicGame.class.getName()).log(Level.SEVERE, null, ex);
-//        }
-//
-//
-//
-//        
-//        
-//        Graphics g=frame.getGraphics();
-//        
-//        
-//        g.setColor(Color.black);
-//        //g.fillRect(0, 0, Widht  , Height);
-//        boolean drawImage = g.drawImage(image, Widht, Height, null);
-//        System.out.println(drawImage);
-//        
-//        g.dispose();
         
 
         
