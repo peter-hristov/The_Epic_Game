@@ -33,6 +33,7 @@ public class InputHandler implements java.awt.event.KeyListener {
     public Key down=new Key();
     public Key left=new Key();
     public Key right=new Key();
+    
     public Key space=new Key();
     
     
@@ -48,7 +49,7 @@ public class InputHandler implements java.awt.event.KeyListener {
     
     @Override
     public void keyTyped(KeyEvent ke) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override

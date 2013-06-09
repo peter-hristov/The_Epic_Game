@@ -21,21 +21,23 @@ public class EpicGame extends Canvas implements Runnable {
     public boolean running=false;
     public int update_count;
     
-    public static final int Widht=1000;
+    public static final int Widht=1440;
     public static final int Height=(Widht*9)/16;
    
-
-    
+  
     public static final String GameName="Epic Game!";
     
     private JFrame frame;
     
-    public static Player player;
+    private Player player;
+    private int max_player_ammo=3;
+    private int max_ast_count=5;
     
     private Lasers lasers;
+    private Rocks rocks;
     
     BufferedImage Background=new BufferedImage(Widht,Height, BufferedImage.TYPE_INT_RGB);
-    BufferedImage laser_image=new BufferedImage(100,100, BufferedImage.TYPE_INT_RGB);
+    
    
     
     public InputHandler input;
@@ -68,19 +70,20 @@ public class EpicGame extends Canvas implements Runnable {
         input=new InputHandler(this);
         
         frame.requestFocusInWindow();
-        
-        //BufferedImage Background=new BufferedImage(Widht,Height, BufferedImage.TYPE_INT_RGB);
+         
         BufferedImage player_image=new BufferedImage(100,100, BufferedImage.TYPE_INT_RGB);
-        
-        
+        BufferedImage laser_image=new BufferedImage(100,100, BufferedImage.TYPE_INT_RGB);
+        BufferedImage asteroid_image=new BufferedImage(100,100, BufferedImage.TYPE_INT_RGB);
         
         try {
             
-            Background = ImageIO.read(new File("src\\epicgame\\images.jpg"));
+            Background = ImageIO.read(new File("images\\background.jpg"));
             
-            player_image = ImageIO.read(new File("src\\epicgame\\a.jpg"));
+            player_image = ImageIO.read(new File("images\\player.jpg"));
             
-            laser_image = ImageIO.read(new File("src\\epicgame\\blue.png"));
+            laser_image = ImageIO.read(new File("images\\projectile.png"));
+            
+            asteroid_image = ImageIO.read(new File("images\\asteroid.jpg"));
              
         } catch (IOException ex) {
             Logger.getLogger(EpicGame.class.getName()).log(Level.SEVERE, null, ex);
@@ -89,15 +92,17 @@ public class EpicGame extends Canvas implements Runnable {
         
         
         
-        player=new Player(0,0,frame.getWidth()/15,frame.getHeight()/15,5,player_image);
+        player=new Player(0,0,frame.getWidth()/15,frame.getHeight()/15,max_player_ammo,player_image);
         
         lasers=new Lasers(player.max_ammo,player,laser_image);
         
+        rocks=new Rocks(max_ast_count,player,asteroid_image);
         
         
+        
+
         System.out.println(10);
-        
-    
+
     }
     
     
@@ -117,11 +122,7 @@ public class EpicGame extends Canvas implements Runnable {
     
     public void update()
     {
-        
-       int n=player.max_ammo;
-        
-        int i;
-        
+               
         //Controls handling
         if (input.up.is_pressed())
         {
@@ -141,12 +142,15 @@ public class EpicGame extends Canvas implements Runnable {
         }
         
         
-
-        if (input.space.is_pressed() && (System.currentTimeMillis() - player.last_fired > 100) )
+        if (input.space.is_pressed() && (System.currentTimeMillis() - player.getLast_fired() > 100) )
         {
             player.last_fired=System.currentTimeMillis();
         
-            lasers.get_free_laser();
+            lasers.get_free_projectile();
+            
+            rocks.get_free_astroid();
+            
+           
         }
           
         lasers.advance_lasers();
@@ -160,7 +164,7 @@ public class EpicGame extends Canvas implements Runnable {
 
     public void render()//This is where the shit happens!
     {
-        //laser.visible=false;
+        
         
         BufferStrategy bs=getBufferStrategy();
         
@@ -172,20 +176,20 @@ public class EpicGame extends Canvas implements Runnable {
         
 
         Graphics a=bs.getDrawGraphics();
-        a.setColor(Color.yellow);
-    
-               
-        
-        a.drawImage(Background, 0, 0, frame.getWidth(), frame.getHeight(),null);
        
+        //BACKGROUND
+        a.drawImage(Background, 0, 0, frame.getWidth(), frame.getHeight(),null);
+        a.setColor(Color.yellow);
+       
+        //TEXT AND STUFF 
         a.setFont(new Font("serif",10,40));
         a.drawString("Ammo : " + player.current_ammo, 0,frame.getHeight()-40);
        
         
       
         player.paint(a);
-        
-        lasers.paint_lasers(a);
+        lasers.paint(a);
+        rocks.paint(a);
         
         
         bs.show();
@@ -198,8 +202,7 @@ public class EpicGame extends Canvas implements Runnable {
     
     public static void main(String[] args) {
         EpicGame game=new EpicGame();
-        game.start();
-        
+        game.start();  
     }
 
     
@@ -222,24 +225,18 @@ public class EpicGame extends Canvas implements Runnable {
             long now=System.nanoTime();
             delta+=(now-lastTime)/ns_per_tick;
             lastTime=now;
-            boolean should_render=true;
+ 
             
             while(delta>=1)
             {
                 updates++;
+                
                 update();
                 render();
-                delta--;
-                should_render=true;
-                
+                delta--; 
             }
-            
-         
-            
-            
-            
-            
-            if(System.currentTimeMillis()-lastTimer >= 100)
+  
+            if(System.currentTimeMillis()-lastTimer >= 1000)
             {
                 lastTimer+=1000;
                 System.out.println(frames + " " + updates);
@@ -247,8 +244,7 @@ public class EpicGame extends Canvas implements Runnable {
                 updates=0;
                 
             }
-        }
-        //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        }    
     }
 
     

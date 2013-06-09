@@ -4,49 +4,36 @@
  */
 package epicgame;
 
-import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 
 /**
  *
  * @author Peter
  */
-public class Lasers {
+public class Lasers extends Collection_Of_Space_Objects{
     
-    public int max_lasers;
+       
+   
     
-    private BufferedImage projectile_image=new BufferedImage(EpicGame.Height,EpicGame.Widht, BufferedImage.TYPE_INT_RGB);
-     
-    Player pl;
-    
-    Projectile m[];
-    
-    public Lasers(int n, Player pl,BufferedImage a)
+    public Lasers(int max_count, Player pl,BufferedImage image)
     {
-        max_lasers=n;
+        this.max_count=max_count;
         this.pl=pl;
-        projectile_image=a;
-        
-        m=new Projectile[max_lasers];    
+        this.image=image;
+        m=new Projectile[max_count];    
     }
     
     
-   
-    
-    public void get_free_laser()
+ 
+    public void get_free_projectile()
     {
-        int n=max_lasers;
-        int i;
+        int i=get_free_object_index();
         
-        for(i=0;i<n;i++)  
-                if(m[i]==null)          
-                    break;
-            
-           if(i!=n)
-           {
-               m[i]=new Projectile(pl.x , pl.y , pl.height/3 , pl.width/3 , projectile_image);
-               pl.current_ammo--;
-           }
+        if(i!=-1)
+        {
+            m[i]=new Projectile(pl.x +10, pl.y-20 , pl.height/3 , pl.width/3 , image);
+            pl.current_ammo--;
+        }
               
     }
     
@@ -54,33 +41,20 @@ public class Lasers {
     public void advance_lasers()
     {
         int i;
-        int n=max_lasers;
+        int n=max_count;
     
          for(i=0;i<n;i++)
        {
             if(m[i]!=null)
             {   
-                m[i].advance(1);
+                m[i].move(1,0);
                 
-                if(m[i].x > EpicGame.Widht + 100)
+                if(m[i].x > 1000)
                 {
                     m[i]=null;
                     pl.current_ammo++;      
                 }
             }
        }
-    }
-    
-    public void paint_lasers(Graphics a)
-    {
-        int i;
-        int n=max_lasers;
-        
-        for(i=0 ; i < n;i++)
-            
-            if(m[i]!=null)
-                
-                m[i].paint(a);   
-    }
-    
+    } 
 }
