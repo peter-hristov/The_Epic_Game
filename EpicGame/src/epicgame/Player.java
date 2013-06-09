@@ -11,7 +11,7 @@ public class Player extends Space_Object{
     public long last_fired;
     
 
-    Player(int x,int y,int height,int width,int max_ammo,BufferedImage a)
+    Player(int x,int y,int width,int height,int max_ammo,BufferedImage a)
     {  
         
         image=a;
@@ -20,8 +20,8 @@ public class Player extends Space_Object{
         this.x=x;    
         this.y=y;  
         
-        this.height=height;
         this.width=width;
+        this.height=height;
         
         this.max_ammo=max_ammo;
         current_ammo=max_ammo;     

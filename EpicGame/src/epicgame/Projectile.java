@@ -11,15 +11,15 @@ public class Projectile extends Space_Object{
     
   
     
-    Projectile(int x,int y,int height,int width,BufferedImage a)
+    Projectile(int x,int y,int width,int height,BufferedImage a)
     {  
         image=a;
         
         this.x=x;    
         this.y=y; 
         
-        this.height=height;
         this.width=width;
+        this.height=height;
         
         active=true;
     }

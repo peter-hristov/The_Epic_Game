@@ -13,14 +13,17 @@ import java.awt.image.BufferedImage;
 public class Lasers extends Collection_Of_Space_Objects{
     
        
-   
+   int w,h;
     
-    public Lasers(int max_count, Player pl,BufferedImage image)
+    public Lasers(int max_count, int w,int h,Player pl,BufferedImage image)
     {
         this.max_count=max_count;
         this.pl=pl;
         this.image=image;
-        m=new Projectile[max_count];    
+        m=new Projectile[max_count];
+        
+        this.w=w;
+        this.h=h; 
     }
     
     
@@ -31,7 +34,7 @@ public class Lasers extends Collection_Of_Space_Objects{
         
         if(i!=-1)
         {
-            m[i]=new Projectile(pl.x +10, pl.y-20 , pl.height/3 , pl.width/3 , image);
+            m[i]=new Projectile(pl.x +10, pl.y-20 , w , h , image);
             pl.current_ammo--;
         }
               

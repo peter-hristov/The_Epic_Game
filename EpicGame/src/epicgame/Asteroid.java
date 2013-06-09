@@ -14,16 +14,16 @@ public class Asteroid extends Space_Object{
     
     public int radius;
     
-    Asteroid(int x,int y,int height,int width,int radius,BufferedImage a)
+    Asteroid(int x,int y,int width,int height,int radius,BufferedImage a)
     {
         image=a;
         
         this.x=x;    
         this.y=y; 
         
-        this.height=height;
         this.width=width;
-        
+        this.height=height;
+       
         this.radius=radius;
         
         active=true;

@@ -18,7 +18,7 @@ import javax.swing.JFrame;
 
 public class EpicGame extends Canvas implements Runnable {
     
-    public boolean running=false;
+    public volatile boolean running=false;
     public int update_count;
     
     public static final int Widht=1440;
@@ -61,48 +61,29 @@ public class EpicGame extends Canvas implements Runnable {
         frame.setLayout(new BorderLayout());
         frame.add(this,BorderLayout.CENTER);
         frame.pack();
-   
         frame.setResizable(false);
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
-        
-        
         input=new InputHandler(this);
-        
         frame.requestFocusInWindow();
+        
          
         BufferedImage player_image=new BufferedImage(100,100, BufferedImage.TYPE_INT_RGB);
         BufferedImage laser_image=new BufferedImage(100,100, BufferedImage.TYPE_INT_RGB);
         BufferedImage asteroid_image=new BufferedImage(100,100, BufferedImage.TYPE_INT_RGB);
         
         try {
-            
-            Background = ImageIO.read(new File("images\\background.jpg"));
-            
+            Background = ImageIO.read(new File("images\\background.jpg"));     
             player_image = ImageIO.read(new File("images\\player.jpg"));
-            
             laser_image = ImageIO.read(new File("images\\projectile.png"));
-            
-            asteroid_image = ImageIO.read(new File("images\\asteroid.jpg"));
-             
+            asteroid_image = ImageIO.read(new File("images\\asteroid.jpg")); 
         } catch (IOException ex) {
             Logger.getLogger(EpicGame.class.getName()).log(Level.SEVERE, null, ex);
         }
         
-        
-        
-        
-        player=new Player(0,0,frame.getWidth()/15,frame.getHeight()/15,max_player_ammo,player_image);
-        
-        lasers=new Lasers(player.max_ammo,player,laser_image);
-        
+        player=new Player(0,0,frame.getWidth()/15,frame.getHeight()/15,max_player_ammo,player_image);      
+        lasers=new Lasers(player.max_ammo,player.width/3,player.height/3,player,laser_image);
         rocks=new Rocks(max_ast_count,player,asteroid_image);
-        
-        
-        
-
-        System.out.println(10);
-
     }
     
     
@@ -124,6 +105,7 @@ public class EpicGame extends Canvas implements Runnable {
     {
                
         //Controls handling
+        //Player movement
         if (input.up.is_pressed())
         {
             player.move(0,-1); 
@@ -138,22 +120,21 @@ public class EpicGame extends Canvas implements Runnable {
         }
         if (input.right.is_pressed())
         {
+            
             player.move(+1,0);
+           
         }
         
-        
-        if (input.space.is_pressed() && (System.currentTimeMillis() - player.getLast_fired() > 100) )
+        //Space
+        if (input.space.is_pressed() && ( System.currentTimeMillis() - player.getLast_fired() ) > 100 )
         {
             player.last_fired=System.currentTimeMillis();
         
-            lasers.get_free_projectile();
-            
-            
-            
-           
+            lasers.get_free_projectile();    
         }
         rocks.get_free_astroid();
-          
+
+        
         lasers.advance_lasers();
         rocks.advance_rocks();
 
@@ -188,12 +169,12 @@ public class EpicGame extends Canvas implements Runnable {
         a.drawString("Ammo : " + player.current_ammo, 0,frame.getHeight()-40);
        
         
-      
+        //Painting important stuff
         player.paint(a);
         lasers.paint(a);
         rocks.paint(a);
         
-        
+        //The end
         bs.show();
         a.dispose();
    
@@ -219,7 +200,9 @@ public class EpicGame extends Canvas implements Runnable {
         
         int frames=0;
         int updates=0;
+        
         long lastTimer=System.currentTimeMillis();
+        
         double delta=0;
         
         while(running)
@@ -232,7 +215,6 @@ public class EpicGame extends Canvas implements Runnable {
             while(delta>=1)
             {
                 updates++;
-                
                 update();
                 render();
                 delta--; 

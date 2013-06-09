@@ -15,13 +15,13 @@ public abstract class Space_Object {
     
     protected BufferedImage image;
     public int x,y;
-    public int height,width;
+    public int width,height;
     public boolean active;
     
     
     public void paint(Graphics a){
         if(active)
-            a.drawImage(image,x,y,height,width, null);
+            a.drawImage(image,x,y,width,height, null);
     }
     
     void move(int offset_x,int offset_y)
