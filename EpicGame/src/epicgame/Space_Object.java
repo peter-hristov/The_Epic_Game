@@ -17,6 +17,7 @@ public abstract class Space_Object {
     public int x,y;
     public int width,height;
     public boolean active;
+    public int radius;
     
     
     public void paint(Graphics a){

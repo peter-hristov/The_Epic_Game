@@ -12,7 +12,7 @@ import java.awt.image.BufferedImage;
  */
 public class Asteroid extends Space_Object{
     
-    public int radius;
+    
     
     Asteroid(int x,int y,int width,int height,int radius,BufferedImage a)
     {
