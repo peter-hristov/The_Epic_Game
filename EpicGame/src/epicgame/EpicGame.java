@@ -27,11 +27,11 @@ public class EpicGame extends Canvas implements Runnable {
   
     public static final String GameName="Epic Game!";
     
-    private JFrame frame;
+    static public JFrame frame;
     
     private Player player;
     private int max_player_ammo=3;
-    private int max_ast_count=5;
+    private int max_ast_count=100;
     
     private Lasers lasers;
     private Rocks rocks;
@@ -148,12 +148,14 @@ public class EpicGame extends Canvas implements Runnable {
         
             lasers.get_free_projectile();
             
-            rocks.get_free_astroid();
+            
             
            
         }
+        rocks.get_free_astroid();
           
         lasers.advance_lasers();
+        rocks.advance_rocks();
 
         update_count++;
      

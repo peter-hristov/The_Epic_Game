@@ -49,7 +49,7 @@ public class Lasers extends Collection_Of_Space_Objects{
             {   
                 m[i].move(1,0);
                 
-                if(m[i].x > 1000)
+                if(m[i].x > EpicGame.Widht + 100)
                 {
                     m[i]=null;
                     pl.current_ammo++;      
