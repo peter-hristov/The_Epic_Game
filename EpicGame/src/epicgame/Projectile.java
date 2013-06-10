@@ -9,7 +9,7 @@ import java.awt.image.BufferedImage;
  */
 public class Projectile extends Space_Object{
     
-  
+   
     
     Projectile(int x,int y,int width,int height,BufferedImage a)
     {  
@@ -20,8 +20,6 @@ public class Projectile extends Space_Object{
         
         this.width=width;
         this.height=height;
-        
-        active=true;
     }
      
 }

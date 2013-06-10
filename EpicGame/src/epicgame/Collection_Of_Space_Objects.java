@@ -42,14 +42,10 @@ public abstract class Collection_Of_Space_Objects {
     
     public void paint(Graphics a)
     {
-        int i;
-        int n=max_count;
-        
-        for(i=0 ; i < n;i++)
+        for(int i=0 ; i < max_count ;i++)
             
             if(m[i]!=null)
                 
                 m[i].paint(a);   
     }
-    
 }

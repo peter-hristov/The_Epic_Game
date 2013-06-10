@@ -15,7 +15,6 @@ public class Player extends Space_Object{
     {  
         
         image=a;
-        active=true;
         
         this.x=x;    
         this.y=y;  
@@ -27,10 +26,6 @@ public class Player extends Space_Object{
         current_ammo=max_ammo;     
     }
 
-    
-    
-    
-    
     
     
     public int getMax_ammo() {

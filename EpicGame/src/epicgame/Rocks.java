@@ -14,8 +14,6 @@ import java.util.Random;
 public class Rocks extends Collection_Of_Space_Objects {
     
     public int radius;
-    int count;
-    int c;
     
     public Rocks(int max_count, Player pl,BufferedImage image)
     {
@@ -23,19 +21,16 @@ public class Rocks extends Collection_Of_Space_Objects {
         this.pl=pl;
         this.image=image;
         m=new Asteroid[max_count];  
-        count=0;
-        c=0;
     }
     
     
-    public void get_free_astroid()
+    public void spawn_rock()
     {
         int i=get_free_object_index();
         
         if(i!=-1)
         {
             Random r=new Random();
-            c++;
             m[i]=new Asteroid(EpicGame.frame.getWidth(), r.nextInt(EpicGame.frame.getHeight()) , 100 , 100 ,141, image);
             
         }
@@ -47,23 +42,17 @@ public class Rocks extends Collection_Of_Space_Objects {
         int i;
         int n=max_count;
     
-         for(i=0;i<n;i++)
-       {
+        for(i=0;i<n;i++)
+        {
             if(m[i]!=null)
             {   
-                
-                
                                     
-                    m[i].move(-1,0);
+                m[i].move(-1,0);
              
-                
                 if(m[i].x < -100)
                 {
                     m[i]=null;
-                    EpicGame.score++;
-                   
-                    c--;
-                    
+                    EpicGame.score++;  
                 }
             }
        }

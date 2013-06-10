@@ -15,23 +15,20 @@ public abstract class Space_Object {
     
     protected BufferedImage image;
     public int x,y;
+    
     public int width,height;
-    public boolean active;
+  
     public int radius;
     
     
     public void paint(Graphics a){
-        if(active)
             a.drawImage(image,x,y,width,height, null);
     }
     
     void move(int offset_x,int offset_y)
     {
-        if(active)
-        {
             x+=offset_x;
             y+=offset_y;
-        }
     }
 
     
@@ -51,9 +48,7 @@ public abstract class Space_Object {
         return width;
     }
 
-    public boolean isActive() {
-        return active;
-    }
+   
     
     
 }
