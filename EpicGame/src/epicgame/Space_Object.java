@@ -13,25 +13,39 @@ import java.awt.image.BufferedImage;
  */
 public abstract class Space_Object {
     
-    protected BufferedImage image;
     public int x,y;
+    public int w,h;
     
-    public int width,height;
-  
-    public int radius;
+    public int image_w,image_h;
+    
+    protected BufferedImage image;
     
     
-    public void paint(Graphics a){
-            a.drawImage(image,x,y,width,height, null);
-    }
+    int frames;
+    int br=0;
     
-    void move(int offset_x,int offset_y)
+    int delay;
+    int counter=0;
+    
+    public void update(int offset_x,int offset_y)
     {
-            x+=offset_x;
-            y+=offset_y;
+        x+=offset_x;
+        y+=offset_y;
+            
+        if(counter%delay==0)
+            br++;      
+        
+        counter++;
+        counter%=delay;
     }
-
     
+    public void paint(Graphics a)
+    {
+        a.drawImage(image, x, y, x+w, y+h, br*image_w, 0, br*image_w+image_w, image_h, null);
+    }
+    
+    
+   
     public int getX() {
         return x;
     }
@@ -40,15 +54,5 @@ public abstract class Space_Object {
         return y;
     }
 
-    public int getHeight() {
-        return height;
-    }
-
-    public int getWidth() {
-        return width;
-    }
-
-   
-    
     
 }

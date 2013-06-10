@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package epicgame;
 
 import java.awt.Graphics;
@@ -44,9 +40,8 @@ public class Explosion {
     public void update()
     {
         if(counter%delay==0)
-        {
             br++;      
-        }
+        
         counter++;
         counter%=delay;
     }

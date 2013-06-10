@@ -97,9 +97,16 @@ public class EpicGame extends Canvas implements Runnable {
             Logger.getLogger(EpicGame.class.getName()).log(Level.SEVERE, null, ex);
         }
         
-        player=new Player(0,0,frame.getWidth()/15,frame.getHeight()/15,max_player_ammo,player_image);      
-        lasers=new Lasers(player.max_ammo,player.width/3,player.height/3,player,laser_image);
-        rocks=new Rocks(max_ast_count,player,asteroid_image);
+        player=new Player(0,0,100,100,560,300,1,1,5,player_image);      
+        
+        //int x,int y,int w,int h,int image_w,int image_h, int delay,int frames,int max_ammo,BufferedImage image)
+        
+        
+        
+        lasers=new Lasers(player.max_ammo,player.w/3,player.h/3,256,256,1,1,player,laser_image);
+        
+        rocks=new Rocks(max_ast_count,100,100,259,149,2,2,asteroid_image);
+        
         explosions=new Explosions(max_exp_count,100,100,64,64,60,13,explosion_image);
     }
     
@@ -122,20 +129,20 @@ public class EpicGame extends Canvas implements Runnable {
         //Player movement
         if (input.up.is_pressed())
         {
-            player.move(0,-1); 
+            player.update(0,-1); 
         }
         if (input.down.is_pressed())
         {
-            player.move(0,+1); 
+            player.update(0,+1); 
         }
         if (input.left.is_pressed())
         {
-           player.move(-1,0);
+           player.update(-1,0);
         }
         if (input.right.is_pressed())
         {
             
-            player.move(+1,0);
+            player.update(+1,0);
            
         }
         
@@ -146,8 +153,8 @@ public class EpicGame extends Canvas implements Runnable {
             lasers.spawn_laser();
         }
         
-        if(update_count%200==0)
-            rocks.spawn_rock();
+  //      if(update_count%200==0)
+//            rocks.spawn_rock();
 
         lasers.advance_lasers();
         rocks.advance_rocks();
@@ -264,13 +271,13 @@ public class EpicGame extends Canvas implements Runnable {
                     
                     if(rocks.m[j]!=null)
                     {
-                        double d=dist(  lasers.m[i].x+lasers.m[i].width,
+                        double d=dist(  lasers.m[i].x+lasers.m[i].w,
                                         
-                                        lasers.m[i].y+lasers.m[i].height/2, 
+                                        lasers.m[i].y+lasers.m[i].h/2, 
                                         
-                                        rocks.m[j].x + rocks.m[j].width/2, 
+                                        rocks.m[j].x + rocks.m[j].w/2, 
                                         
-                                        rocks.m[j].y + rocks.m[j].height/2);
+                                        rocks.m[j].y + rocks.m[j].h/2);
                 
                 
                         if( d < 70 )
@@ -296,13 +303,13 @@ public class EpicGame extends Canvas implements Runnable {
         {            
             if( rocks.m[i] != null )
             {
-                double d=dist(  player.x+player.width/2,
+                double d=dist(  player.x+player.w/2,
                                 
-                                player.y+player.height/2,
+                                player.y+player.h/2,
                                 
-                                rocks.m[i].x + rocks.m[i].width/2,
+                                rocks.m[i].x + rocks.m[i].w/2,
                                 
-                                rocks.m[i].y + rocks.m[i].height/2);
+                                rocks.m[i].y + rocks.m[i].h/2);
                 
                 if( d < 70 )
                 {
@@ -312,13 +319,5 @@ public class EpicGame extends Canvas implements Runnable {
                 }       
             }
         }
-    }
-    
-    
-    
-    
-
-    
-    
-    
+    }    
 }

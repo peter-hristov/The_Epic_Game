@@ -13,14 +13,19 @@ import java.awt.image.BufferedImage;
  */
 public abstract class Collection_Of_Space_Objects {
     
-    public int max_count;
+        public Space_Object m[];
+        int max_count;
     
-    protected BufferedImage image=new BufferedImage(EpicGame.Height,EpicGame.Widht, BufferedImage.TYPE_INT_RGB);
+        public int w,h;
     
-    Space_Object m[];
+        public int image_w,image_h;
     
-    Player pl;
+        protected BufferedImage image;
     
+        int counter=0;
+        int frames;
+        int br=0;
+        int delay;
     
     
     

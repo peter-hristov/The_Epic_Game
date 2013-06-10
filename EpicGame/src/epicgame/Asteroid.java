@@ -13,17 +13,21 @@ import java.awt.image.BufferedImage;
 public class Asteroid extends Space_Object{
     
 
-    Asteroid(int x,int y,int width,int height,int radius,BufferedImage a)
+    Asteroid (int x,int y,int w,int h,int image_w,int image_h, int delay,int frames,BufferedImage image)
     {
-        image=a;
+        this.x=x;
+        this.y=y;
         
-        this.x=x;    
-        this.y=y; 
+        this.w=w;
+        this.h=h;
         
-        this.width=width;
-        this.height=height;
-       
-        this.radius=radius;
+        this.image_w=image_w;
+        this.image_h=image_h;
+        
+        this.delay=delay;
+        this.frames=frames;
+        
+        this.image=image;
     }
     
 }

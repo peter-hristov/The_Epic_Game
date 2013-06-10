@@ -10,17 +10,23 @@ public class Player extends Space_Object{
     public int current_ammo;
     public long last_fired;
     
+    
 
-    Player(int x,int y,int width,int height,int max_ammo,BufferedImage a)
-    {  
+    Player (int x,int y,int w,int h,int image_w,int image_h, int delay,int frames,int max_ammo,BufferedImage image)
+    {
+        this.x=x;
+        this.y=y;
         
-        image=a;
+        this.w=w;
+        this.h=h;
         
-        this.x=x;    
-        this.y=y;  
+        this.image_w=image_w;
+        this.image_h=image_h;
         
-        this.width=width;
-        this.height=height;
+        this.delay=delay;
+        this.frames=frames;
+        
+        this.image=image;
         
         this.max_ammo=max_ammo;
         current_ammo=max_ammo;     
