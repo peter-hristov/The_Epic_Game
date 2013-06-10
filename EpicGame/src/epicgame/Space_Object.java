@@ -33,7 +33,10 @@ public abstract class Space_Object {
         y+=offset_y;
             
         if(counter%delay==0)
+        {
             br++;      
+            br%=frames;
+        }
         
         counter++;
         counter%=delay;
@@ -41,7 +44,7 @@ public abstract class Space_Object {
     
     public void paint(Graphics a)
     {
-        a.drawImage(image, x, y, x+w, y+h, br*image_w, 0, br*image_w+image_w, image_h, null);
+        a.drawImage(image, x, y, x + w, y + h, br*image_w, 0, br*image_w+image_w, image_h, null);
     }
     
     

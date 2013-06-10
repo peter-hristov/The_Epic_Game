@@ -10,6 +10,7 @@ import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;
@@ -21,7 +22,7 @@ public class EpicGame extends Canvas implements Runnable {
     public volatile boolean running=false;
     public int update_count;
     
-    public static final int Widht=1200;
+    public static final int Widht=1024;
     public static final int Height=(Widht*9)/16;
    
   
@@ -30,7 +31,7 @@ public class EpicGame extends Canvas implements Runnable {
     static public JFrame frame;
     
 
-    private int max_player_ammo=5;
+    private int max_player_ammo=10;
     private int max_ast_count=3;
     private int max_exp_count=50;
     
@@ -45,8 +46,6 @@ public class EpicGame extends Canvas implements Runnable {
     int br=0;
     int delay=0;
     
-    //BufferedImage ExplosionFrame = new BufferedImage(Widht,Height, BufferedImage.TYPE_INT_RGB);
-            
     
     public static int score=0;
     
@@ -87,27 +86,22 @@ public class EpicGame extends Canvas implements Runnable {
         BufferedImage explosion_image=new BufferedImage(100,100, BufferedImage.TYPE_INT_RGB);
         
         try {
+            
             Background = ImageIO.read(new File("images\\background.jpg"));
-            player_image = ImageIO.read(new File("images\\player.jpg"));
+            player_image = ImageIO.read(new File("images\\player.png"));
             laser_image = ImageIO.read(new File("images\\projectile.png"));
-            asteroid_image = ImageIO.read(new File("images\\asteroid.jpg"));
+            asteroid_image = ImageIO.read(new File("images\\ast.png"));
             explosion_image = ImageIO.read(new File("images\\Splosion.png"));
            
         } catch (IOException ex) {
             Logger.getLogger(EpicGame.class.getName()).log(Level.SEVERE, null, ex);
         }
         
-        player=new Player(0,0,100,100,560,300,1,1,5,player_image);      
+        player=new Player(0,0,80,80,100,100,30,4,max_player_ammo,player_image);      
         
-        //int x,int y,int w,int h,int image_w,int image_h, int delay,int frames,int max_ammo,BufferedImage image)
-        
-        
-        
-        lasers=new Lasers(player.max_ammo,player.w/3,player.h/3,256,256,1,1,player,laser_image);
-        
-        rocks=new Rocks(max_ast_count,100,100,259,149,2,2,asteroid_image);
-        
-        explosions=new Explosions(max_exp_count,100,100,64,64,60,13,explosion_image);
+        lasers=new Lasers(player.max_ammo,55,20,55,20,30,7,player,laser_image);
+        rocks=new Rocks(max_ast_count,100,100,64,64,30,64,asteroid_image);
+        explosions=new Explosions(max_exp_count,100,100,64,64,30,13,explosion_image);
     }
     
     
@@ -127,6 +121,8 @@ public class EpicGame extends Canvas implements Runnable {
                
         //Controls handling
         //Player movement
+        player.update(0,0);
+        
         if (input.up.is_pressed())
         {
             player.update(0,-1); 
@@ -153,11 +149,12 @@ public class EpicGame extends Canvas implements Runnable {
             lasers.spawn_laser();
         }
         
-  //      if(update_count%200==0)
-//            rocks.spawn_rock();
+        Random r=new Random();
+        if(update_count%200==0)
+            rocks.spawn_rock(1000,r.nextInt(800) );
 
         lasers.advance_lasers();
-        rocks.advance_rocks();
+        rocks.update();
         explosions.update();
         
         detect_laser_rock_collision();
@@ -187,6 +184,7 @@ public class EpicGame extends Canvas implements Runnable {
        
         //BACKGROUND
         a.drawImage(Background, 0, 0, frame.getWidth(), frame.getHeight(),null);
+        //a.drawImage(rocks.image, 0, 0, 4000, 64,null);
         a.setColor(Color.yellow);
        
         //Painting important stuff
@@ -194,6 +192,8 @@ public class EpicGame extends Canvas implements Runnable {
         lasers.paint(a);
         rocks.paint(a);
         explosions.paint(a);
+        
+            
         
          //TEXT AND STUFF 
         a.setFont(new Font("serif",10,40));
@@ -244,6 +244,7 @@ public class EpicGame extends Canvas implements Runnable {
             {
                 updates++;
                 update();
+               
                 delta--; 
             }
             

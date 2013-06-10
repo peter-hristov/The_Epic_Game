@@ -12,12 +12,13 @@ import java.util.Random;
  * @author Peter
  */
 public class Rocks extends Collection_Of_Space_Objects {
+
     
         
     Rocks(int max_count,int w,int h,int image_w,int image_h, int delay,int frames,BufferedImage image)
     {
         this.max_count=max_count;
-        m=new Projectile[max_count];
+        m=new Asteroid[max_count];
         
         this.w=w;
         this.h=h;
@@ -31,38 +32,42 @@ public class Rocks extends Collection_Of_Space_Objects {
         this.image=image;
     }
     
-   
-    public void spawn_rock()
+    private int get_free_rock()
     {
-        int i=get_free_object_index();
+        int i;
         
-        Random r=new Random();
+        for( i=0;i<max_count;i++)
+            if(m[i]==null)
+                break;
         
+        if(i==max_count)
+            return -1;
+        
+        else return i;
+        
+        
+    }
+    
+    public void spawn_rock(int x,int y)
+    {
+        int i=get_free_rock();
         if(i!=-1)
         {
-            m[i]=new Asteroid(EpicGame.Widht+100, r.nextInt(EpicGame.Height), w, h, image_w, image_h, delay, frames, image);
+            m[i]=new Asteroid(x, y, w, h, image_w, image_h, delay, frames, image);
         }
     }
     
     
-    public void advance_rocks()
+    public void update()
     {
-        int i;
-        int n=max_count;
-    
-         for(i=0;i<n;i++)
-       {
+        for(int i=0;i<max_count;i++)
             if(m[i]!=null)
-            {   
-                m[i].update(1,0);
-                
-                if(m[i].x > EpicGame.Widht + 1000)
-                {
+            {
+                m[i].update(-1,0);
+                if(m[i].x<0)
                     m[i]=null;
-                }
-            }
-       }
-    } 
-    }  
+            }   
+    }
+}  
     
 

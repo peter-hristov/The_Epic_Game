@@ -41,7 +41,15 @@ public class Lasers extends Collection_Of_Space_Objects{
         
         if(i!=-1)
         {
-            m[i]=new Projectile(pl.x + pl.w, pl.y + pl.h/2 - h/2, w, h, image_w, image_h, delay, frames, image);
+            m[i]=new Projectile(pl.x + 30, pl.y  , w, h, image_w, image_h, delay, frames, image);
+            pl.current_ammo--;
+        }
+        
+        i=get_free_object_index();
+        
+        if(i!=-1)
+        {
+            m[i]=new Projectile(pl.x + 30 , pl.y +56, w, h, image_w, image_h, delay, frames, image);
             pl.current_ammo--;
         }
     }

@@ -11,26 +11,14 @@ import java.awt.image.BufferedImage;
  *
  * @author Peter
  */
-public class Explosions {
+public class Explosions extends Collection_Of_Space_Objects{
     
-    public Explosion m[];
-    int e_count;
     
-    public int w,h;
     
-    public int image_w,image_h;
-    
-    protected BufferedImage image;
-    
-    int counter=0;
-    int frames;
-    int br=0;
-    int delay;
-    
-    Explosions(int e_count,int w,int h,int image_w,int image_h, int delay,int frames,BufferedImage image)
+    Explosions(int max_count,int w,int h,int image_w,int image_h, int delay,int frames,BufferedImage image)
     {
-        this.e_count=e_count;
-        m=new Explosion[e_count];
+        this.max_count=max_count;
+        m=new Explosion[max_count];
         
         this.w=w;
         this.h=h;
@@ -48,11 +36,11 @@ public class Explosions {
     {
         int i;
         
-        for( i=0;i<e_count;i++)
+        for( i=0;i<max_count;i++)
             if(m[i]==null)
                 break;
         
-        if(i==e_count)
+        if(i==max_count)
             return -1;
         
         else return i;
@@ -69,24 +57,15 @@ public class Explosions {
         }
     }
     
-    public void paint(Graphics a)
-    {
-        for(int i=0;i<e_count;i++)
-            if(m[i]!=null)
-                m[i].paint(a);   
-    }
     
     public void update()
     {
-        for(int i=0;i<e_count;i++)
+        for(int i=0;i<max_count;i++)
             if(m[i]!=null)
             {
-                m[i].update();
-                if(m[i].br==m[i].frames)
+                m[i].update(-1,0);
+                if(m[i].br==m[i].frames-1)
                     m[i]=null;
             }   
     }
-    
-    
-    
 }
