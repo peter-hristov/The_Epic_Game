@@ -49,6 +49,12 @@ public class Collection_Of_Space_Objects {
         return false;
     }
     
+    public void reset()
+    {
+        for(int i=0;i<max_count;i++)
+            m[i]=null;
+    }
+    
     public void update(int offset_x,int offset_y)
     {
         for(int i=0;i<max_count;i++)
@@ -56,7 +62,6 @@ public class Collection_Of_Space_Objects {
             if(m[i]!=null)
             
                 m[i].update(offset_x,offset_y);
-          
     }
     
     

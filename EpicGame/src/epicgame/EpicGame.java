@@ -21,6 +21,7 @@ public class EpicGame extends Canvas implements Runnable {
     
     public volatile boolean running=false;
     public int update_count;
+    public boolean game_over=false;
     int w=0;
     
     public static final int Width=1024;
@@ -61,8 +62,7 @@ public class EpicGame extends Canvas implements Runnable {
     
     
     
-    
-    
+      
     public EpicGame()
     {  
         setMinimumSize(new Dimension(Width,Height));
@@ -99,9 +99,12 @@ public class EpicGame extends Canvas implements Runnable {
         }
         
         player=new Player(0,0,80,80,100,100,50,4,max_player_ammo,player_image);              
-        lasers=new Collection_Of_Space_Objects(player.max_ammo,55,20,55,20,100,7,laser_image);
+        lasers=new Collection_Of_Space_Objects(player.max_ammo,75,30,55,20,120,9,laser_image);
         rocks=new Collection_Of_Space_Objects(max_ast_count,100,100,64,64,40,64,asteroid_image);
-        explosions=new Collection_Of_Space_Objects(max_exp_count,100,100,64,64,30,13,explosion_image);
+        explosions=new Collection_Of_Space_Objects(max_exp_count,100,100,64,64,25,13,explosion_image);
+        
+        player.x=0;
+        player.y=Height/2-player.h/2;
     }
     
     
@@ -119,25 +122,30 @@ public class EpicGame extends Canvas implements Runnable {
     public void update()
     {
                
-        //Controls handling
-        //Player movement
         
-        if (input.up.is_pressed())
+        if(input.enter.is_pressed() && game_over)
+        {
+            reset_game();
+        }
+        //Controls handling
+        
+        //Player movement
+        if (input.up.is_pressed() && player.y>0)
         {
             player.update(0,-1); 
         }
        
-        else if (input.down.is_pressed())
+        else if (input.down.is_pressed() && player.y < (Height - player.h) )
         {
             player.update(0,+1); 
         }
         
-        else if (input.left.is_pressed())
+        else if (input.left.is_pressed() && player.x>0)
         {
            player.update(-1,0);
         }
         
-        else if (input.right.is_pressed())
+        else if (input.right.is_pressed() && player.x < (Width - player.w) )
         {    
             player.update(+1,0);  
         }
@@ -146,17 +154,17 @@ public class EpicGame extends Canvas implements Runnable {
             player.update(0, 0);
         
         //Space
-        if (input.space.is_pressed() && ( System.currentTimeMillis() - player.getLast_fired() ) > 100 )
+        if (input.space.is_pressed() && ( System.currentTimeMillis() - player.getLast_fired() ) > 300 )
         {
             player.last_fired=System.currentTimeMillis();
             
             if(lasers.spawn(player.x + 30, player.y))player.current_ammo--;
             
-            if(lasers.spawn(player.x + 30 , player.y +56))player.current_ammo--;
+            if(lasers.spawn(player.x + 30 , player.y +50))player.current_ammo--;
         }
         
         if(update_count%200==0)
-            rocks.spawn(Width+200,new Random().nextInt(Height) );
+            rocks.spawn(Width+500,new Random().nextInt(Height) );
 
         lasers.update(1,0);
         rocks.update(-1,0);
@@ -211,9 +219,22 @@ public class EpicGame extends Canvas implements Runnable {
             
         
          //TEXT AND STUFF 
-        a.setFont(new Font("serif",10,40));
-        a.drawString("Ammo : " + player.current_ammo, 0,frame.getHeight()-40);
-        a.drawString("Score : " + score,300,frame.getHeight()-40);    
+        if(game_over)
+        {
+            a.setFont(new Font("serif",10,100));
+            a.drawString("Game Over!", Width/2-250,frame.getHeight()/2-50);
+            a.setFont(new Font("serif",10,40));
+            
+            a.drawString("Your score was : " + score,350,frame.getHeight()-220);    
+            a.drawString("Press enter to reset... ",350,frame.getHeight()-40);    
+        }
+        else
+        {
+            a.setFont(new Font("serif",10,40));
+            a.drawString("Ammo : " + player.current_ammo, 0,frame.getHeight()-40);
+            a.drawString("Score : " + score,300,frame.getHeight()-40);    
+        }
+            
         
         //The end
         bs.show();
@@ -238,9 +259,6 @@ public class EpicGame extends Canvas implements Runnable {
         
         long lastTime=System.nanoTime();
         double ns_per_tick=1000000D; 
-        
-       
-       
         
         int frames=0;
         int updates=0;
@@ -300,7 +318,7 @@ public class EpicGame extends Canvas implements Runnable {
                 if(rocks.m[i].x < - 100)
                 {   
                     rocks.m[i]=null;
-                    score++;
+                    if(!game_over)score++;
                 }
     }
     
@@ -336,7 +354,7 @@ public class EpicGame extends Canvas implements Runnable {
                                         rocks.m[j].y + rocks.m[j].h/2);
                 
                 
-                        if( d < 70 )
+                        if( d < rocks.sample.h/2 + 5 )
                         {
                            explosions.spawn(rocks.m[j].x, rocks.m[j].y);
                            
@@ -367,13 +385,37 @@ public class EpicGame extends Canvas implements Runnable {
                                 
                                 rocks.m[i].y + rocks.m[i].h/2);
                 
-                if( d < 70 )
+                if( d < 80 )
                 {
-                    //player=null;
-                    running = false;
+                    explosions.spawn(rocks.m[i].x, rocks.m[i].y);
+                    explosions.spawn(player.x, player.y);
+                 
+                    rocks.m[i]=null;
+                    
+                    player.x=-100000;
+                    player.y=-100000;
+                    
+                    game_over=true;
+                    
                     return;
                 }       
             }
         }
     }    
+
+
+    void reset_game()
+    {
+            lasers.reset();
+            rocks.reset();
+            explosions.reset();
+ 
+            player.x=0;
+            player.y=Height/2-player.h/2;
+            
+            game_over=false;
+            score=0;
+            player.current_ammo=player.max_ammo;
+    }
+    
 }

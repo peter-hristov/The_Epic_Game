@@ -35,6 +35,7 @@ public class InputHandler implements java.awt.event.KeyListener {
     public Key right=new Key();
     
     public Key space=new Key();
+    public Key enter=new Key();
     
     
     
@@ -78,6 +79,9 @@ public class InputHandler implements java.awt.event.KeyListener {
         if(key_code == KeyEvent.VK_RIGHT){right.toggle(is_pressed);}
         
         if(key_code == KeyEvent.VK_SPACE){space.toggle(is_pressed);}
+        
+        if(key_code == KeyEvent.VK_ENTER){enter.toggle(is_pressed);}
+        
     }
     
 }
