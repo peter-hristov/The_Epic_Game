@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package epicgame;
 
 import java.awt.Graphics;
@@ -14,36 +10,15 @@ import java.awt.image.BufferedImage;
 public class Collection_Of_Space_Objects {
     
         public Space_Object m[];
+        public Space_Object sample;
         int max_count;
     
-        public int w,h;
-    
-        public int image_w,image_h;
-    
-        protected BufferedImage image;
-    
-        int counter=0;
-        int frames;
-        int br=0;
-        int delay;
-    
-    
-    
-        Collection_Of_Space_Objects (int max_count,int w,int h,int image_w,int image_h, int delay,int frames,BufferedImage image)
+ 
+        Collection_Of_Space_Objects (int max_count,int w,int h,int frame_w,int frame_h, int delay,int frames,BufferedImage image)
         {
             this.max_count=max_count;
             m=new Space_Object[max_count];
-        
-            this.w=w;
-            this.h=h;
-        
-            this.image_w=image_w;
-            this.image_h=image_h;
-        
-            this.delay=delay;
-            this.frames=frames;
-        
-            this.image=image;
+            sample = new Space_Object(0,0,w,h,frame_w,frame_h,delay,frames,image);
         }
 
         
@@ -68,7 +43,7 @@ public class Collection_Of_Space_Objects {
         int i=get_free_object_index();
         if(i!=-1)
         {
-            m[i]=new Space_Object(x, y, w, h, image_w, image_h, delay, frames, image);
+            m[i]=new Space_Object(x, y, sample.w, sample.h, sample.frame_w, sample.frame_h, sample.delay, sample.frames, sample.image);
             return true;
         }
         return false;

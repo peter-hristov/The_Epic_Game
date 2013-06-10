@@ -16,7 +16,7 @@ public class Space_Object {
     public int x,y;
     public int w,h;
     
-    public int image_w,image_h;
+    public int frame_w,frame_h;
     
     protected BufferedImage image;
     
@@ -32,7 +32,7 @@ public class Space_Object {
     
     }
     
-    Space_Object (int x,int y,int w,int h,int image_w,int image_h, int delay,int frames,BufferedImage image)
+    Space_Object (int x,int y,int w,int h,int frame_w,int frame_h, int delay,int frames,BufferedImage image)
     {
         this.x=x;
         this.y=y;
@@ -40,8 +40,8 @@ public class Space_Object {
         this.w=w;
         this.h=h;
         
-        this.image_w=image_w;
-        this.image_h=image_h;
+        this.frame_w=frame_w;
+        this.frame_h=frame_h;
         
         this.delay=delay;
         this.frames=frames;
@@ -54,9 +54,9 @@ public class Space_Object {
         x+=offset_x;
         y+=offset_y;
             
-        if(counter%delay==0)
+        if(counter % delay==0 )
         {
-            br++;      
+            br++;     
             br%=frames;
         }
         
@@ -66,6 +66,7 @@ public class Space_Object {
     
     public void paint(Graphics a)
     {
-        a.drawImage(image, x, y, x + w, y + h, br*image_w, 0, br*image_w+image_w, image_h, null);
-    } 
+        a.drawImage(image, x, y, x + w, y + h, br*frame_w, 0, br*frame_w+frame_w, frame_h, null);
+    }
+    
 }

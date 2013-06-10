@@ -21,9 +21,10 @@ public class EpicGame extends Canvas implements Runnable {
     
     public volatile boolean running=false;
     public int update_count;
+    int w=0;
     
-    public static final int Widht=1024;
-    public static final int Height=(Widht*9)/16;
+    public static final int Width=1024;
+    public static final int Height=(Width*9)/16;
    
   
     public static final String GameName="Epic Game!";
@@ -32,15 +33,15 @@ public class EpicGame extends Canvas implements Runnable {
     
 
     private int max_player_ammo=10;
-    private int max_ast_count=3;
-    private int max_exp_count=50;
+    private int max_ast_count=5;
+    private int max_exp_count=6;
     
     private Player player;
     private Collection_Of_Space_Objects lasers;
     private Collection_Of_Space_Objects rocks;
     private Collection_Of_Space_Objects explosions;
     
-    BufferedImage Background=new BufferedImage(Widht,Height, BufferedImage.TYPE_INT_RGB);
+    BufferedImage Background=new BufferedImage(Width,Height, BufferedImage.TYPE_INT_RGB);
 
     
     int br=0;
@@ -64,9 +65,9 @@ public class EpicGame extends Canvas implements Runnable {
     
     public EpicGame()
     {  
-        setMinimumSize(new Dimension(Widht,Height));
-        setMaximumSize(new Dimension(Widht,Height));
-        setPreferredSize(new Dimension(Widht,Height));
+        setMinimumSize(new Dimension(Width,Height));
+        setMaximumSize(new Dimension(Width,Height));
+        setPreferredSize(new Dimension(Width,Height));
         
         frame=new JFrame(GameName);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -97,7 +98,7 @@ public class EpicGame extends Canvas implements Runnable {
             Logger.getLogger(EpicGame.class.getName()).log(Level.SEVERE, null, ex);
         }
         
-        player=new Player(0,0,80,80,100,100,30,4,max_player_ammo,player_image);              
+        player=new Player(0,0,80,80,100,100,50,4,max_player_ammo,player_image);              
         lasers=new Collection_Of_Space_Objects(player.max_ammo,55,20,55,20,100,7,laser_image);
         rocks=new Collection_Of_Space_Objects(max_ast_count,100,100,64,64,40,64,asteroid_image);
         explosions=new Collection_Of_Space_Objects(max_exp_count,100,100,64,64,30,13,explosion_image);
@@ -120,26 +121,29 @@ public class EpicGame extends Canvas implements Runnable {
                
         //Controls handling
         //Player movement
-        player.update(0,0);
         
         if (input.up.is_pressed())
         {
             player.update(0,-1); 
         }
-        if (input.down.is_pressed())
+       
+        else if (input.down.is_pressed())
         {
             player.update(0,+1); 
         }
-        if (input.left.is_pressed())
+        
+        else if (input.left.is_pressed())
         {
            player.update(-1,0);
         }
-        if (input.right.is_pressed())
-        {
-            
-            player.update(+1,0);
-           
+        
+        else if (input.right.is_pressed())
+        {    
+            player.update(+1,0);  
         }
+        
+        else
+            player.update(0, 0);
         
         //Space
         if (input.space.is_pressed() && ( System.currentTimeMillis() - player.getLast_fired() ) > 100 )
@@ -149,12 +153,10 @@ public class EpicGame extends Canvas implements Runnable {
             if(lasers.spawn(player.x + 30, player.y))player.current_ammo--;
             
             if(lasers.spawn(player.x + 30 , player.y +56))player.current_ammo--;
-            
         }
         
-        Random r=new Random();
         if(update_count%200==0)
-            rocks.spawn(1000,r.nextInt(800) );
+            rocks.spawn(Width+200,new Random().nextInt(Height) );
 
         lasers.update(1,0);
         rocks.update(-1,0);
@@ -191,7 +193,12 @@ public class EpicGame extends Canvas implements Runnable {
         Graphics a=bs.getDrawGraphics();
        
         //BACKGROUND
-        a.drawImage(Background, 0, 0, frame.getWidth(), frame.getHeight(),null);
+        int delay=5;
+        
+        w--;
+        w%=(delay*1024);
+        
+        a.drawImage(Background, w/delay, 0, frame.getWidth()+1024, frame.getHeight(),null);
         //a.drawImage(rocks.image, 0, 0, 4000, 64,null);
         a.setColor(Color.yellow);
        
@@ -277,7 +284,7 @@ public class EpicGame extends Canvas implements Runnable {
             
             if(lasers.m[i]!=null)
                 
-                if(lasers.m[i].x > Widht)
+                if(lasers.m[i].x > Width)
                 {
                     lasers.m[i]=null;
                     player.current_ammo++;

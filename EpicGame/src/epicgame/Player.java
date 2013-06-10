@@ -10,7 +10,6 @@ public class Player extends Space_Object{
     public int current_ammo;
     public long last_fired;
    
-
     Player (int x,int y,int w,int h,int image_w,int image_h, int delay,int frames,int max_ammo,BufferedImage image)
     {
         this.x=x;
@@ -19,8 +18,8 @@ public class Player extends Space_Object{
         this.w=w;
         this.h=h;
         
-        this.image_w=image_w;
-        this.image_h=image_h;
+        this.frame_w=image_w;
+        this.frame_h=image_h;
         
         this.delay=delay;
         this.frames=frames;
@@ -31,8 +30,6 @@ public class Player extends Space_Object{
         current_ammo=max_ammo;     
     }
 
-    
-    
     public int getMax_ammo() {
         return max_ammo;
     }
@@ -44,8 +41,6 @@ public class Player extends Space_Object{
     public long getLast_fired() {
         return last_fired;
     }
-    
-    
-    
+
     
 }
