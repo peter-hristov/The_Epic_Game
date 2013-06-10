@@ -5,7 +5,6 @@ import java.awt.image.BufferedImage;
 
 public class Player extends Space_Object{
     
-  
     public int max_ammo;
     public int current_ammo;
     public long last_fired;

@@ -29,7 +29,19 @@ public class Space_Object {
     
     Space_Object()
     {
-    
+        this.x=0;
+        this.y=0;
+        
+        this.w=0;
+        this.h=0;
+        
+        this.frame_w=0;
+        this.frame_h=0;
+        
+        this.delay=0;
+        this.frames=0;
+        
+        this.image=null;
     }
     
     Space_Object (int x,int y,int w,int h,int frame_w,int frame_h, int delay,int frames,BufferedImage image)

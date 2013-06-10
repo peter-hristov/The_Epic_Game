@@ -28,7 +28,6 @@ public class InputHandler implements java.awt.event.KeyListener {
     }
     
     
-  
     public Key up=new Key();
     public Key down=new Key();
     public Key left=new Key();
