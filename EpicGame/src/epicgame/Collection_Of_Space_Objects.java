@@ -11,7 +11,7 @@ import java.awt.image.BufferedImage;
  *
  * @author Peter
  */
-public abstract class Collection_Of_Space_Objects {
+public class Collection_Of_Space_Objects {
     
         public Space_Object m[];
         int max_count;
@@ -29,6 +29,25 @@ public abstract class Collection_Of_Space_Objects {
     
     
     
+        Collection_Of_Space_Objects (int max_count,int w,int h,int image_w,int image_h, int delay,int frames,BufferedImage image)
+        {
+            this.max_count=max_count;
+            m=new Space_Object[max_count];
+        
+            this.w=w;
+            this.h=h;
+        
+            this.image_w=image_w;
+            this.image_h=image_h;
+        
+            this.delay=delay;
+            this.frames=frames;
+        
+            this.image=image;
+        }
+
+        
+        
     public int get_free_object_index()
     { 
         int i;
@@ -43,6 +62,27 @@ public abstract class Collection_Of_Space_Objects {
         return -1;
     }
     
+    
+    public boolean spawn(int x,int y)
+    {
+        int i=get_free_object_index();
+        if(i!=-1)
+        {
+            m[i]=new Space_Object(x, y, w, h, image_w, image_h, delay, frames, image);
+            return true;
+        }
+        return false;
+    }
+    
+    public void update(int offset_x,int offset_y)
+    {
+        for(int i=0;i<max_count;i++)
+            
+            if(m[i]!=null)
+            
+                m[i].update(offset_x,offset_y);
+          
+    }
     
     
     public void paint(Graphics a)

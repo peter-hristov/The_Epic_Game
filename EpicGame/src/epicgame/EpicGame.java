@@ -36,9 +36,9 @@ public class EpicGame extends Canvas implements Runnable {
     private int max_exp_count=50;
     
     private Player player;
-    private Lasers lasers;
-    private Rocks rocks;
-    private Explosions explosions;
+    private Collection_Of_Space_Objects lasers;
+    private Collection_Of_Space_Objects rocks;
+    private Collection_Of_Space_Objects explosions;
     
     BufferedImage Background=new BufferedImage(Widht,Height, BufferedImage.TYPE_INT_RGB);
 
@@ -87,7 +87,7 @@ public class EpicGame extends Canvas implements Runnable {
         
         try {
             
-            Background = ImageIO.read(new File("images\\background.jpg"));
+            Background = ImageIO.read(new File("images\\bg.jpg"));
             player_image = ImageIO.read(new File("images\\player.png"));
             laser_image = ImageIO.read(new File("images\\projectile.png"));
             asteroid_image = ImageIO.read(new File("images\\ast.png"));
@@ -97,11 +97,10 @@ public class EpicGame extends Canvas implements Runnable {
             Logger.getLogger(EpicGame.class.getName()).log(Level.SEVERE, null, ex);
         }
         
-        player=new Player(0,0,80,80,100,100,30,4,max_player_ammo,player_image);      
-        
-        lasers=new Lasers(player.max_ammo,55,20,55,20,30,7,player,laser_image);
-        rocks=new Rocks(max_ast_count,100,100,64,64,30,64,asteroid_image);
-        explosions=new Explosions(max_exp_count,100,100,64,64,30,13,explosion_image);
+        player=new Player(0,0,80,80,100,100,30,4,max_player_ammo,player_image);              
+        lasers=new Collection_Of_Space_Objects(player.max_ammo,55,20,55,20,100,7,laser_image);
+        rocks=new Collection_Of_Space_Objects(max_ast_count,100,100,64,64,40,64,asteroid_image);
+        explosions=new Collection_Of_Space_Objects(max_exp_count,100,100,64,64,30,13,explosion_image);
     }
     
     
@@ -146,16 +145,25 @@ public class EpicGame extends Canvas implements Runnable {
         if (input.space.is_pressed() && ( System.currentTimeMillis() - player.getLast_fired() ) > 100 )
         {
             player.last_fired=System.currentTimeMillis();
-            lasers.spawn_laser();
+            
+            if(lasers.spawn(player.x + 30, player.y))player.current_ammo--;
+            
+            if(lasers.spawn(player.x + 30 , player.y +56))player.current_ammo--;
+            
         }
         
         Random r=new Random();
         if(update_count%200==0)
-            rocks.spawn_rock(1000,r.nextInt(800) );
+            rocks.spawn(1000,r.nextInt(800) );
 
-        lasers.advance_lasers();
-        rocks.update();
-        explosions.update();
+        lasers.update(1,0);
+        rocks.update(-1,0);
+        explosions.update(-1,0);
+        
+        check_lasers();
+        check_rocks();
+        check_explosions();
+        
         
         detect_laser_rock_collision();
         detect_player_rock_collision();
@@ -262,6 +270,46 @@ public class EpicGame extends Canvas implements Runnable {
     }
     
     
+    
+    void check_lasers()
+    {
+        for(int i=0;i<lasers.max_count;i++)
+            
+            if(lasers.m[i]!=null)
+                
+                if(lasers.m[i].x > Widht)
+                {
+                    lasers.m[i]=null;
+                    player.current_ammo++;
+                }
+    }
+    
+    void check_rocks()
+    {
+        for(int i=0;i<rocks.max_count;i++)
+            
+            if(rocks.m[i]!=null)
+                
+                if(rocks.m[i].x < - 100)
+                {   
+                    rocks.m[i]=null;
+                    score++;
+                }
+    }
+    
+    void check_explosions()
+    {
+        for(int i=0;i<explosions.max_count;i++)
+            
+            if(explosions.m[i]!=null)
+                
+                if(explosions.m[i].br==explosions.m[i].frames-1)
+                    
+                    explosions.m[i]=null;
+    }
+            
+    
+    
     void detect_laser_rock_collision()
     {
         for(int i=0 ; i < lasers.max_count ; i++)
@@ -283,7 +331,7 @@ public class EpicGame extends Canvas implements Runnable {
                 
                         if( d < 70 )
                         {
-                           explosions.spawn_explosion(rocks.m[j].x, rocks.m[j].y);
+                           explosions.spawn(rocks.m[j].x, rocks.m[j].y);
                            
                            lasers.m[i]=null;
                            rocks.m[j]=null;

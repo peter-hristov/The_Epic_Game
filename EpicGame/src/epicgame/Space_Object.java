@@ -11,7 +11,7 @@ import java.awt.image.BufferedImage;
  *
  * @author Peter
  */
-public abstract class Space_Object {
+public class Space_Object {
     
     public int x,y;
     public int w,h;
@@ -26,6 +26,28 @@ public abstract class Space_Object {
     
     int delay;
     int counter=0;
+    
+    Space_Object()
+    {
+    
+    }
+    
+    Space_Object (int x,int y,int w,int h,int image_w,int image_h, int delay,int frames,BufferedImage image)
+    {
+        this.x=x;
+        this.y=y;
+        
+        this.w=w;
+        this.h=h;
+        
+        this.image_w=image_w;
+        this.image_h=image_h;
+        
+        this.delay=delay;
+        this.frames=frames;
+        
+        this.image=image;
+    }
     
     public void update(int offset_x,int offset_y)
     {
@@ -45,17 +67,5 @@ public abstract class Space_Object {
     public void paint(Graphics a)
     {
         a.drawImage(image, x, y, x + w, y + h, br*image_w, 0, br*image_w+image_w, image_h, null);
-    }
-    
-    
-   
-    public int getX() {
-        return x;
-    }
-
-    public int getY() {
-        return y;
-    }
-
-    
+    } 
 }
