@@ -8,6 +8,7 @@ public class Player extends Space_Object{
     public int max_ammo;
     public int current_ammo;
     public long last_fired;
+    public long started_firing;
    
     Player (int x,int y,int w,int h,int image_w,int image_h, int delay,int frames,int max_ammo,BufferedImage image)
     {
